@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eh:config
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns:eh='http://www.ehcache.org/v3'
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.3.xsd">
+    <!--指定缓存目录-->
+    <eh:persistence directory="${java.io.tmpdir}/cfa-cache-data"/>
+
+    <!--缓存模板-->
+    <eh:cache-template name="default">
+        <eh:expiry>
+            <!-- 在expires标签中，我们定义了30秒的生存时间(ttl)。生存时间指定缓存条目独立于访问可以在缓存中保留多长时间。指定的时间过期后，将从缓存中删除该值。 -->
+            <eh:ttl unit="seconds">600</eh:ttl>
+        </eh:expiry>
+        <!-- 配置缓存的层和容量。 -->
+        <eh:resources>
+            <!-- 对于堆上存储，我们配置了2,000个缓存条目的容量。这是开始删除缓存之前的最大条目数。 -->
+            <eh:heap unit="entries">2000</eh:heap>
+            <!-- 对于堆外存储，我们配置了100mb的容量。 -->
+            <eh:offheap unit="MB">100</eh:offheap>
+        </eh:resources>
+    </eh:cache-template>
+
+    <!--实际的缓存区间，继承了default缓存模板,cfa 完全使用模板默认-->
+    <eh:cache alias="userInfo" uses-template="default">
+
+    </eh:cache>
+</eh:config>

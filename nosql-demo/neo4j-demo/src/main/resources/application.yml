@@ -1,0 +1,11 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /neo4j
+spring:
+  data:
+    neo4j:
+      uri: bolt://localhost:7687
+      username: MyTest
+      password: 123456
+

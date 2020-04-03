@@ -1,0 +1,10 @@
+#其他自定义配置
+author:
+  name: zhaolei
+ftp:
+  ftp_host: 139.159.177.48
+  ftp_port: 21
+  ftp_username: zhaolei
+  ftp_password: ！zl667799
+  #上传文件存放的文件夹目录
+  ftp_fileFolder: ftp_demo

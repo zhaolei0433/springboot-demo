@@ -1,0 +1,2212 @@
+Index: src/main/java/com/ipanel/web/app/cv/entity/CollectionMachineDisks.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/entity/CollectionMachineDisks.java	(date 1548471052164)
++++ src/main/java/com/ipanel/web/app/cv/entity/CollectionMachineDisks.java	(date 1548471052164)
+@@ -0,0 +1,29 @@
++package com.ipanel.web.app.cv.entity;
++
++import lombok.Data;
++import org.bson.types.ObjectId;
++
++import java.io.Serializable;
++import java.util.List;
++
++@Data
++public class CollectionMachineDisks implements Serializable {
++
++	public static final String FIELD_NAME_MSN = "msn";
++	public static final String FIELD_NAME_DISKS = "disks";
++	public static final String FIELD_NAME_TIME_SERVICE_START = "time_service_start";
++	public static final String FIELD_NAME_TIME_SERVICE_END = "time_service_end";
++
++	private ObjectId id;
++
++	private String msn;
++
++	public List<String> diskList;
++
++	public String disks;
++
++	public Integer timeServiceStart;
++
++	public Integer timeServiceEnd;
++
++}
+Index: src/main/java/com/ipanel/web/app/cv/model/repository/primary/PrimaryMongoObject.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/model/repository/primary/PrimaryMongoObject.java	(date 1548495382522)
++++ src/main/java/com/ipanel/web/app/cv/model/repository/primary/PrimaryMongoObject.java	(date 1548495382522)
+@@ -0,0 +1,36 @@
++package com.ipanel.web.app.cv.model.repository.primary;
++
++import lombok.AllArgsConstructor;
++import lombok.Data;
++import lombok.NoArgsConstructor;
++import org.springframework.data.mongodb.core.mapping.Document;
++
++import java.util.List;
++
++/**
++ * @author neo
++ */
++@Data
++@AllArgsConstructor
++@NoArgsConstructor
++@Document(collection = "collection_machine_disks")
++public class PrimaryMongoObject {
++
++	private String msn;
++
++	public List<String> diskList;
++
++	public Integer timeServiceStart;
++
++	public Integer timeServiceEnd;
++
++	@Override
++	public String toString() {
++		return "PrimaryMongoObject{" +
++				"msn='" + msn + '\'' +
++				", diskList=" + diskList +
++				", timeServiceStart=" + timeServiceStart +
++				", timeServiceEnd=" + timeServiceEnd +
++				'}';
++	}
++}
+Index: src/main/java/com/ipanel/web/app/cv/comfig/Mongoconfig/PrimaryMongoConfig.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/comfig/Mongoconfig/PrimaryMongoConfig.java	(date 1548475595643)
++++ src/main/java/com/ipanel/web/app/cv/comfig/Mongoconfig/PrimaryMongoConfig.java	(date 1548475595643)
+@@ -0,0 +1,15 @@
++package com.ipanel.web.app.cv.comfig.Mongoconfig;
++
++import org.springframework.context.annotation.Configuration;
++import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
++
++/**
++ * @author neo
++ */
++@Configuration
++@EnableMongoRepositories(basePackages = "com.ipanel.web.app.cv.model.repository.primary",
++		mongoTemplateRef = PrimaryMongoConfig.MONGO_TEMPLATE)
++public class PrimaryMongoConfig {
++
++	protected static final String MONGO_TEMPLATE = "primaryMongoTemplate";
++}
+Index: src/main/java/com/ipanel/web/app/cv/comfig/Mongoconfig/props/MultipleMongoProperties.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/comfig/Mongoconfig/props/MultipleMongoProperties.java	(date 1548475596145)
++++ src/main/java/com/ipanel/web/app/cv/comfig/Mongoconfig/props/MultipleMongoProperties.java	(date 1548475596145)
+@@ -0,0 +1,16 @@
++package com.ipanel.web.app.cv.comfig.Mongoconfig.props;
++
++import lombok.Data;
++import org.springframework.boot.autoconfigure.mongo.MongoProperties;
++import org.springframework.boot.context.properties.ConfigurationProperties;
++
++/**
++ * @author neo
++ */
++@Data
++@ConfigurationProperties(prefix = "mongodb")
++public class MultipleMongoProperties {
++
++	private MongoProperties primary = new MongoProperties();
++	private MongoProperties secondary = new MongoProperties();
++}
+Index: src/main/java/com/ipanel/web/app/cv/comfig/Mongoconfig/SecondaryMongoConfig.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/comfig/Mongoconfig/SecondaryMongoConfig.java	(date 1548475595674)
++++ src/main/java/com/ipanel/web/app/cv/comfig/Mongoconfig/SecondaryMongoConfig.java	(date 1548475595674)
+@@ -0,0 +1,15 @@
++package com.ipanel.web.app.cv.comfig.Mongoconfig;
++
++import org.springframework.context.annotation.Configuration;
++import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
++
++/**
++ * @author neo
++ */
++@Configuration
++@EnableMongoRepositories(basePackages = "com.ipanel.web.app.cv.model.repository.secondary",
++		mongoTemplateRef = SecondaryMongoConfig.MONGO_TEMPLATE)
++public class SecondaryMongoConfig {
++
++	protected static final String MONGO_TEMPLATE = "secondaryMongoTemplate";
++}
+Index: src/main/java/com/ipanel/web/app/cv/entity/UserEntity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/entity/UserEntity.java	(date 1548466857371)
++++ src/main/java/com/ipanel/web/app/cv/entity/UserEntity.java	(date 1548466857371)
+@@ -0,0 +1,46 @@
++package com.ipanel.web.app.cv.entity;
++
++import java.io.Serializable;
++
++/**
++ * Created by summer on 2017/5/5.
++ */
++public class UserEntity implements Serializable {
++        private static final long serialVersionUID = -3258839839160856613L;
++        private Long id;
++        private String userName;
++        private String passWord;
++
++        public Long getId() {
++                return id;
++        }
++
++        public void setId(Long id) {
++                this.id = id;
++        }
++
++        public String getUserName() {
++                return userName;
++        }
++
++        public void setUserName(String userName) {
++                this.userName = userName;
++        }
++
++        public String getPassWord() {
++                return passWord;
++        }
++
++        public void setPassWord(String passWord) {
++                this.passWord = passWord;
++        }
++
++        @Override
++        public String toString() {
++                return "UserEntity{" +
++                        "id=" + id +
++                        ", userName='" + userName + '\'' +
++                        ", passWord='" + passWord + '\'' +
++                        '}';
++        }
++}
+Index: src/main/java/com/ipanel/web/app/cv/model/repository/primary/PrimaryRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/model/repository/primary/PrimaryRepository.java	(date 1548476481571)
++++ src/main/java/com/ipanel/web/app/cv/model/repository/primary/PrimaryRepository.java	(date 1548476481571)
+@@ -0,0 +1,11 @@
++package com.ipanel.web.app.cv.model.repository.primary;
++
++import org.springframework.data.mongodb.repository.MongoRepository;
++
++/**
++ * @author neo
++ */
++
++public interface PrimaryRepository extends MongoRepository<PrimaryMongoObject, String> {
++
++}
+Index: src/main/java/com/ipanel/web/app/cv/global/Response.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/global/Response.java	(date 1548389376745)
++++ src/main/java/com/ipanel/web/app/cv/global/Response.java	(date 1548389376745)
+@@ -0,0 +1,60 @@
++package com.ipanel.web.app.cv.global;/**
++ * @ClassName
++ * @Author lz
++ * @Date
++ * @Description
++ **/
++
++import com.fasterxml.jackson.annotation.JsonInclude;
++import lombok.*;
++
++/**
++ * @ClassName
++ * @Author lz
++ * @Date
++ * @Description
++ **/
++@Getter
++@Setter
++@ToString
++@NoArgsConstructor
++@AllArgsConstructor
++public class Response<T> {
++
++    private Integer code;
++
++    private String msg;
++
++    @JsonInclude(JsonInclude.Include.NON_NULL)
++    private T data;
++
++    private static Response RESULT_SUCCESS = new Response(Constants.ERROR_CODE_00000, Constants.ERROR_CODE_00000_MSG);
++
++    private static Response RESULT_FAILED = new Response(Constants.ERROR_CODE_00001, Constants.ERROR_CODE_00001_MSG);;
++
++    public Response(Integer code, String msg){
++        this.code = code;
++        this.msg = msg;
++    }
++
++    public static Response SUCCESS(){
++        return RESULT_SUCCESS;
++    }
++
++    public static <T> Response<T> SUCCESS(T data){
++        return new Response<T>(Constants.ERROR_CODE_00000, Constants.ERROR_CODE_00000_MSG, data);
++    }
++
++    public static Response FAILED(){
++        return RESULT_FAILED;
++    }
++
++    public static Response FAILED(String msg){
++        return new Response(Constants.ERROR_CODE_00001, (msg == null || msg.replaceAll(" ", "").equals("")) ? Constants.ERROR_CODE_00001_MSG : msg);
++    }
++
++    public static Response FAILED(int code, String msg){
++        return new Response(code, msg);
++    }
++
++}
+Index: src/main/java/com/ipanel/web/app/cv/model/repository/secondary/SecondaryRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/model/repository/secondary/SecondaryRepository.java	(date 1548475595937)
++++ src/main/java/com/ipanel/web/app/cv/model/repository/secondary/SecondaryRepository.java	(date 1548475595937)
+@@ -0,0 +1,9 @@
++package com.ipanel.web.app.cv.model.repository.secondary;
++
++import org.springframework.data.mongodb.repository.MongoRepository;
++
++/**
++ * @author neo
++ */
++public interface SecondaryRepository extends MongoRepository<SecondaryMongoObject, String> {
++}
+Index: src/main/java/com/ipanel/web/app/cv/global/Constants.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/global/Constants.java	(date 1548397170009)
++++ src/main/java/com/ipanel/web/app/cv/global/Constants.java	(date 1548397170009)
+@@ -0,0 +1,35 @@
++package com.ipanel.web.app.cv.global;
++
++public class Constants {
++
++	public static final Integer ERROR_CODE_00000 = 0;
++	public static final String ERROR_CODE_00000_MSG = "操作成功";
++	public static final Integer ERROR_CODE_00001 = 1;
++	public static final String ERROR_CODE_00001_MSG = "操作失败";
++	public static final Integer ERROR_CODE_00002 = 2;
++	public static final String ERROR_CODE_00002_MSG = "域名不存在";
++	public static final Integer RETURN_CODE_00003 = 3;
++	public static final String RETURN_CODE_00003_MSG = "请求参数有误！";
++	public static final Integer RETURN_CODE_00004 = 4;
++	public static final String RETURN_CODE_00004_MSG = "访问ip变化！";
++	public static final Integer RETURN_CODE_00005 = 5;
++	public static final String RETURN_CODE_00005_MSG = "无效token！";
++	public static final Integer RETURN_CODE_00006 = 6;
++	public static final String RETURN_CODE_00006_MSG = "系统中不存在此名字的区域！";
++	public static final Integer RETURN_CODE_00007 = 7;
++	public static final String RETURN_CODE_00007_MSG = "用户名不存在！";
++	public static final Integer RETURN_CODE_00008 = 8;
++	public static final String RETURN_CODE_00008_MSG = "用户名密码不匹配！";
++	public static final Integer RETURN_CODE_00009 = 9;
++	public static final String RETURN_CODE_00009_MSG = "登录失败！";
++	public static final Integer RETURN_CODE_00010 = 10;
++	public static final String RETURN_CODE_E0010_MSG = "系统查询数据为空！";
++	public static final Integer RETURN_CODE_00011 = 11;
++	public static final String RETURN_CODE_00011_MSG = "参数不能为空！";
++
++	public static final Integer RETURN_CODE_00404 = 404;
++	public static final String RETURN_CODE_00404_MSG = "服务器不能处理该请求！";
++	public static final Integer RETURN_CODE_00500 = 500;
++	public static final String RETURN_CODE_00500_MSG = "服务器内部错误！";
++
++}
+Index: src/main/java/com/ipanel/web/app/cv/global/GlobalExceptionController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/global/GlobalExceptionController.java	(date 1548397511428)
++++ src/main/java/com/ipanel/web/app/cv/global/GlobalExceptionController.java	(date 1548397511428)
+@@ -0,0 +1,75 @@
++package com.ipanel.web.app.cv.global;
++
++import lombok.extern.log4j.Log4j2;
++import org.springframework.http.converter.HttpMessageNotReadableException;
++import org.springframework.util.CollectionUtils;
++import org.springframework.validation.BindException;
++import org.springframework.web.bind.MethodArgumentNotValidException;
++import org.springframework.web.bind.MissingServletRequestParameterException;
++import org.springframework.web.bind.annotation.ControllerAdvice;
++import org.springframework.web.bind.annotation.ExceptionHandler;
++import org.springframework.web.bind.annotation.ResponseBody;
++
++/**
++ * 终端请求接口，全局异常处理*/
++
++
++@ControllerAdvice
++@Log4j2
++public class GlobalExceptionController {
++
++    @ExceptionHandler({NullPointerException.class, ArrayIndexOutOfBoundsException.class, ArithmeticException.class})
++    @ResponseBody
++    public Response handleException500(Exception e){
++        log.error("handleException500", e);
++        return Response.FAILED(Constants.RETURN_CODE_00500, Constants.RETURN_CODE_00500_MSG);
++    }
++
++    @ExceptionHandler(Exception.class)
++    @ResponseBody
++    public Response handleException(Exception e){
++        log.error("handleException", e);
++        return Response.FAILED(Constants.ERROR_CODE_00001, Constants.ERROR_CODE_00001_MSG);
++    }
++
++    /**
++     * 检验请求参数格式
++     * @param e
++     * @return
++     */
++    @ExceptionHandler(HttpMessageNotReadableException.class)
++    @ResponseBody
++    public Response handleHttpMessageNotReadableException(Exception e){
++        log.error("handleException", e);
++        return Response.FAILED(Constants.ERROR_CODE_00001, Constants.ERROR_CODE_00001_MSG+"：请求参格式异常!");
++    }
++
++    /**
++     * 检验请求参数数据格式
++     * @param e
++     * @return
++     */
++    @ExceptionHandler(MethodArgumentNotValidException.class)
++    @ResponseBody
++    public Response handleModelArgumentsException(MethodArgumentNotValidException e){
++        log.error("Bean 校验异常"+e.getMessage());
++        if (e.getBindingResult() != null && !CollectionUtils.isEmpty(e.getBindingResult().getAllErrors())) {
++            return Response.FAILED(Constants.RETURN_CODE_00003, Constants.RETURN_CODE_00003_MSG+e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
++        } else {
++            return Response.FAILED(Constants.RETURN_CODE_00003, Constants.RETURN_CODE_00003_MSG+Constants.RETURN_CODE_00003_MSG+e.getMessage());
++        }
++    }
++
++    //url参数异常
++    @ExceptionHandler({MissingServletRequestParameterException.class, BindException.class})
++    @ResponseBody
++    public Response handlePathArgumentException2(Exception e){
++        log.error("传参为空:"+e.getMessage());
++        if(e instanceof  BindException){
++            return Response.FAILED(Constants.RETURN_CODE_00003, ((BindException) e).getBindingResult().getAllErrors().get(0).getDefaultMessage());
++        } else {
++            return Response.FAILED(Constants.RETURN_CODE_00011, e.getMessage());
++        }
++    }
++
++}
+Index: src/main/java/com/ipanel/web/app/cv/comfig/Mongoconfig/MultipleMongoConfig.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/comfig/Mongoconfig/MultipleMongoConfig.java	(date 1548496202928)
++++ src/main/java/com/ipanel/web/app/cv/comfig/Mongoconfig/MultipleMongoConfig.java	(date 1548496202928)
+@@ -0,0 +1,58 @@
++package com.ipanel.web.app.cv.comfig.Mongoconfig;
++
++import com.ipanel.web.app.cv.comfig.Mongoconfig.props.MultipleMongoProperties;
++import com.mongodb.MongoClient;
++import com.mongodb.MongoClientURI;
++import com.mongodb.MongoCredential;
++import com.mongodb.ServerAddress;
++import com.sun.xml.internal.fastinfoset.util.CharArray;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.beans.factory.annotation.Qualifier;
++import org.springframework.boot.autoconfigure.mongo.MongoProperties;
++import org.springframework.context.annotation.Bean;
++import org.springframework.context.annotation.Configuration;
++import org.springframework.context.annotation.Primary;
++import org.springframework.data.mongodb.MongoDbFactory;
++import org.springframework.data.mongodb.core.MongoTemplate;
++import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
++
++import java.util.ArrayList;
++import java.util.List;
++
++/**
++ * @author neo
++ */
++@Configuration
++public class MultipleMongoConfig {
++
++	@Autowired
++	private MultipleMongoProperties mongoProperties;
++
++	@Primary
++	@Bean(name = PrimaryMongoConfig.MONGO_TEMPLATE)
++	public MongoTemplate primaryMongoTemplate() throws Exception {
++		return new MongoTemplate(primaryFactory(this.mongoProperties.getPrimary()));
++	}
++
++	@Bean
++	@Qualifier(SecondaryMongoConfig.MONGO_TEMPLATE)
++	public MongoTemplate secondaryMongoTemplate() throws Exception {
++        return new MongoTemplate(secondaryFactory(this.mongoProperties.getSecondary()));
++	}
++
++	@Bean
++    @Primary
++	public MongoDbFactory primaryFactory(MongoProperties mongo) throws Exception {
++		/*List<MongoCredential> mongoCredentials = new ArrayList<>();
++		mongoCredentials.add(MongoCredential.createScramSha1Credential(mongo.getUsername(),mongo.getDatabase(), mongo.getPassword()));
++		MongoClient mongoClient = new MongoClient(new ServerAddress(mongo.getHost(),mongo.getPort()),mongoCredentials);
++		return new SimpleMongoDbFactory(mongoClient,mongo.getDatabase());*/
++		return new SimpleMongoDbFactory(new MongoClientURI(mongo.getUri()));
++
++	}
++
++	@Bean
++	public MongoDbFactory secondaryFactory(MongoProperties mongo) throws Exception {
++		return new SimpleMongoDbFactory(new MongoClientURI(mongo.getUri()));
++	}
++}
+Index: src/main/java/com/ipanel/web/app/cv/model/repository/secondary/SecondaryMongoObject.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/model/repository/secondary/SecondaryMongoObject.java	(date 1548490507649)
++++ src/main/java/com/ipanel/web/app/cv/model/repository/secondary/SecondaryMongoObject.java	(date 1548490507649)
+@@ -0,0 +1,30 @@
++package com.ipanel.web.app.cv.model.repository.secondary;
++
++import lombok.AllArgsConstructor;
++import lombok.Data;
++import lombok.NoArgsConstructor;
++import org.bson.types.ObjectId;
++import org.springframework.data.annotation.Id;
++import org.springframework.data.mongodb.core.mapping.Document;
++
++/**
++ * @author neo
++ */
++@Data
++@AllArgsConstructor
++@NoArgsConstructor
++@Document(collection = "yangycy")
++public class SecondaryMongoObject {
++
++	@Id
++	private ObjectId id;
++
++	private String value;
++
++
++	@Override
++	public String toString() {
++        return "SecondaryMongoObject{" + "id='" + id + '\'' + ", value='" + value + '\''
++				+ '}';
++	}
++}
+Index: src/main/java/com/ipanel/web/app/cv/business/place/service/impl/PlaceServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/business/place/service/impl/PlaceServiceImpl.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/business/place/service/impl/PlaceServiceImpl.java	(date 1548315964331)
+@@ -37,20 +37,20 @@
+     @Override
+     public Boolean addPlace(AddPlaceReq req) throws Exception {
+         Optional<Area> optionalArea = areaRepository.findById(req.getAreaId());
+-        if (!optionalArea.isPresent()){
++        if (!optionalArea.isPresent()) {
+             throw new Exception("区域不存在，无法添加会场");
+         }
+-        if (optionalArea.get().getIsCompany() ==1){
++        if (optionalArea.get().getIsCompany() == 1) {
+             throw new Exception("单位不可添加会场");
+         }
+-        if (optionalArea.get().getParentArea() == null){
++        if (optionalArea.get().getParentArea() == null) {
+             throw new Exception("区域不在单位下，不可添加会场");
+         }
+-        if (optionalArea.get().getParentArea().getIsCompany() != 1){
+-            throw  new Exception("区域不在单位下，不可添加会场");
++        if (optionalArea.get().getParentArea().getIsCompany() != 1) {
++            throw new Exception("区域不在单位下，不可添加会场");
+         }
+-        if (placeRepository.existsByPlaceMasterOrPlaceName(req.getPlaceMaster(),req.getPlaceName())){
+-            throw  new Exception("会场Mac或会场名已存在");
++        if (placeRepository.existsByPlaceMasterOrPlaceName(req.getPlaceMaster(), req.getPlaceName())) {
++            throw new Exception("会场Mac或会场名已存在");
+         }
+         Place place = new Place();
+         place.setPlaceName(req.getPlaceName());
+@@ -58,7 +58,7 @@
+         place.setPhoneNum(req.getPhoneNum());
+         place.setPlaceType(req.getPlaceType());
+         place.setArea(optionalArea.get());
+-        logger.info("optionalArea.get() == "+optionalArea.get().toString());
++        logger.info("optionalArea.get() == " + optionalArea.get().toString());
+         place.setCompany(optionalArea.get().getParentArea());
+         placeRepository.save(place);
+ 
+@@ -70,26 +70,27 @@
+     @Override
+     public List<Place> queryPlace(Integer areaId) throws Exception {
+         Optional<Area> optionalArea = areaRepository.findById(areaId);
+-        if (!optionalArea.isPresent()){
++        if (!optionalArea.isPresent()) {
+             throw new Exception("区域不存在");
+         }
+         List<Place> places = new ArrayList<>();
+         List<Area> areas = getChildrenArea(optionalArea.get());
+-        areas.forEach(area ->places.addAll(area.getPlaces()));
++        areas.forEach(area -> places.addAll(area.getPlaces()));
+         areaList.clear();
+         return places;
+     }
++
+     //递归获取底层区域
+-    List<Area> getChildrenArea(Area area){
++    List<Area> getChildrenArea(Area area) {
+         if (area.getChildrenAreas().isEmpty()) {
+             areaList.add(area);
+             return areaList;
+         }
+         List<Area> childrenAreas = area.getChildrenAreas().stream().sorted(Comparator.comparing(Area::getId)).collect(Collectors.toList());
+-        for (Area childrenArea:childrenAreas) {
+-            if (childrenArea.getChildrenAreas().isEmpty()){
++        for (Area childrenArea : childrenAreas) {
++            if (childrenArea.getChildrenAreas().isEmpty()) {
+                 areaList.add(childrenArea);
+-            }else {
++            } else {
+                 getChildrenArea(childrenArea);
+             }
+         }
+Index: src/main/java/com/ipanel/web/app/cv/business/myLog/service/IMyLogService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/business/myLog/service/IMyLogService.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/business/myLog/service/IMyLogService.java	(date 1548315963831)
+@@ -11,8 +11,9 @@
+ public interface IMyLogService {
+     /**
+      * 添加日志
++     *
+      * @param logInfo
+      * @return
+      */
+-    Boolean addLog(LogInfo logInfo) throws  Exception;
++    Boolean addLog(LogInfo logInfo) throws Exception;
+ }
+Index: src/main/java/com/ipanel/web/app/cv/LiveClassroomApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/LiveClassroomApplication.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/LiveClassroomApplication.java	(date 1548476118230)
+@@ -1,18 +1,18 @@
+ package com.ipanel.web.app.cv;
+ 
++import com.ipanel.web.app.cv.comfig.Mongoconfig.props.MultipleMongoProperties;
+ import org.springframework.boot.SpringApplication;
+ import org.springframework.boot.autoconfigure.SpringBootApplication;
+-import org.springframework.boot.web.servlet.ServletComponentScan;
+-import org.springframework.context.annotation.EnableAspectJAutoProxy;
++import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
++import org.springframework.boot.context.properties.EnableConfigurationProperties;
+ import org.springframework.scheduling.annotation.EnableAsync;
+-import org.springframework.scheduling.annotation.EnableScheduling;
+-import org.springframework.transaction.annotation.EnableTransactionManagement;
+ 
++@EnableConfigurationProperties(MultipleMongoProperties.class)
+ @EnableAsync
+-@SpringBootApplication
++@SpringBootApplication(exclude = MongoAutoConfiguration.class)
+ public class LiveClassroomApplication {
+ 
+-	public static void main(String[] args) {
+-		SpringApplication.run(LiveClassroomApplication.class, args);
+-	}
++    public static void main(String[] args) {
++        SpringApplication.run(LiveClassroomApplication.class, args);
++    }
+ }
+Index: src/main/java/com/ipanel/web/app/cv/business/place/controller/PlaceController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/business/place/controller/PlaceController.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/business/place/controller/PlaceController.java	(date 1548315964902)
+@@ -43,8 +43,8 @@
+     @ApiOperation(value = "添加会场")
+     @ApiImplicitParam(name = "req", value = "会场参数", dataType = "AddPlaceReq", required = true, paramType = "body")
+     @RequestMapping(value = "", method = RequestMethod.POST)
+-    public Result<Boolean> addPlace(@RequestBody AddPlaceReq req) throws Exception{
+-        logger.info("req == "+req);
++    public Result<Boolean> addPlace(@RequestBody AddPlaceReq req) throws Exception {
++        logger.info("req == " + req);
+         return new Result<>(placeService.addPlace(req));
+     }
+ 
+@@ -57,7 +57,7 @@
+     }
+ 
+     @SysLog(operationType = SystemDefines.SYSLOG_DELETE, operationName = "删除会场")
+-    @ApiOperation(value = "删除会场"  )
++    @ApiOperation(value = "删除会场")
+     @ApiImplicitParam(name = "placeId", value = "区域/社区id", dataType = "int", required = true, paramType = "path")
+     @RequestMapping(value = "{placeId}", method = RequestMethod.DELETE)
+     public Result<Boolean> deletePlace(@PathVariable("placeId") Integer placeId) throws Exception {
+Index: src/main/java/com/ipanel/web/app/cv/comfig/ExecutorConfig.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/comfig/ExecutorConfig.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/comfig/ExecutorConfig.java	(date 1548315965131)
+@@ -53,7 +53,7 @@
+         executor.setWaitForTasksToCompleteOnShutdown(true);
+         executor.initialize();
+         //jvm中增加一个关闭的钩子,在jvm关闭时开启一个一步线程关闭线程池。
+-      //  Runtime.getRuntime().addShutdownHook(new Thread(executor::shutdown));
++        //  Runtime.getRuntime().addShutdownHook(new Thread(executor::shutdown));
+         return executor;
+     }
+ 
+@@ -65,17 +65,17 @@
+     class SpringAsyncExceptionHandler implements AsyncUncaughtExceptionHandler {
+         @Override
+         public void handleUncaughtException(Throwable throwable, Method method, Object... obj) {
+-            asyncHandlerException(throwable,method);
++            asyncHandlerException(throwable, method);
+         }
+ 
+         private void asyncHandlerException(Throwable throwable, Method method) {
+             if (throwable instanceof MyException) {
+-                logger.error(method + " occurs in async thread :",throwable);
+-            }else if (throwable instanceof MyException2){
+-                logger.error(method + " occurs in async thread :",throwable);
+-            }else {
++                logger.error(method + " occurs in async thread :", throwable);
++            } else if (throwable instanceof MyException2) {
++                logger.error(method + " occurs in async thread :", throwable);
++            } else {
+                 //异步线程未知异常，告知处理
+-                logger.error(method + " Unknown exception occurs in async thread :",throwable);
++                logger.error(method + " Unknown exception occurs in async thread :", throwable);
+ 
+             }
+         }
+Index: src/main/java/com/ipanel/web/app/cv/aspect/ControllerAop.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/aspect/ControllerAop.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/aspect/ControllerAop.java	(date 1548394632878)
+@@ -32,27 +32,28 @@
+     private static final Logger logger = LoggerFactory.getLogger(ControllerAop.class);
+ 
+     private IMyLogService myLogService;
++
+     @Autowired
+     public ControllerAop(IMyLogService myLogService) {
+         this.myLogService = myLogService;
+     }
+ 
+ 
+-
+-
+     /**
+      * 切入点
+      * 匹配以Result为方法类型的所有方法
+      */
+     @Pointcut("execution(public com.ipanel.web.app.cv.global.response.Result *(..))")
+-    public void controllerAop(){
++    public void controllerAop() {
+     }
++
+     /**
+      * 前置通知，目标方法调用前被调用
++     *
+      * @param joinPoint 切点
+      */
+     @Before("controllerAop()")
+-    public void doBefore(JoinPoint joinPoint){
++    public void doBefore(JoinPoint joinPoint) {
+         //logger.info("- - - - - 前置通知，目标方法调用前被调用 - - - - ");
+         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+         assert attributes != null;
+@@ -68,22 +69,24 @@
+         //param
+         logger.info("args={}", joinPoint.getArgs());
+     }
++
+     /**
+      * 后置最终通知，目标方法执行完执行
+      */
+     @After("controllerAop()")
+-    public void doAfter(){
++    public void doAfter() {
+         //logger.info("- - - - - 后置最终通知，目标方法执行完执行 - - - - -");
+     }
+ 
+     /**
+      * 后置返回通知
++     *
+      * @param result
+      * @param joinPoint
+      */
+     @AfterReturning(pointcut = "controllerAop()", returning = "result")
+-    public void doAfterReturnig(JoinPoint joinPoint ,Result<?> result) throws Exception {
+-       //logger.info("- - - - - 后置返回通知 - - - - -");
++    public void doAfterReturnig(JoinPoint joinPoint, Result<?> result) throws Exception {
++        //logger.info("- - - - - 后置返回通知 - - - - -");
+         String targetName = joinPoint.getTarget().getClass().getSimpleName();
+         String methodName = joinPoint.getSignature().getName();
+         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+@@ -106,7 +109,7 @@
+         LogInfo logInfo = new LogInfo();
+         logInfo.setOperationType(operationType);
+         logInfo.setOperationName(operationName);
+-        logInfo.setMethod(targetName+"."+methodName+"()");
++        logInfo.setMethod(targetName + "." + methodName + "()");
+         logInfo.setCreateBy(name);
+         logInfo.setCreateDate(System.currentTimeMillis());
+         if (result.getCode() == 0) {
+@@ -120,12 +123,13 @@
+ 
+     /**
+      * 后置异常通知
+-     *  定义一个名字，该名字用于匹配通知实现方法的一个参数名，当目标方法抛出异常返回后，将把目标方法抛出的异常传给通知方法；
+-     *  throwing 只有目标方法抛出的异常与通知方法相应参数异常类型时才能执行后置异常通知，否则不执行，
++     * 定义一个名字，该名字用于匹配通知实现方法的一个参数名，当目标方法抛出异常返回后，将把目标方法抛出的异常传给通知方法；
++     * throwing 只有目标方法抛出的异常与通知方法相应参数异常类型时才能执行后置异常通知，否则不执行，
++     *
+      * @param exception 异常类
+      */
+-    @AfterThrowing(pointcut = "controllerAop()",throwing = "exception")
+-    public void afterThrowingAdvice(Exception exception){
++    @AfterThrowing(pointcut = "controllerAop()", throwing = "exception")
++    public void afterThrowingAdvice(Exception exception) {
+         logger.info("- - - - - 后置异常通知 - - - - -");
+         logger.info("exception={}", exception.toString());
+     }
+@@ -136,7 +140,7 @@
+      * 环绕通知第一个参数必须是org.aspectj.lang.ProceedingJoinPoint类型
+      */
+     @Around("controllerAop()")
+-    public Object aroundAdvice(ProceedingJoinPoint proceedingJoinPoint){
++    public Object aroundAdvice(ProceedingJoinPoint proceedingJoinPoint) {
+         //logger.info("- - - - - 环绕通知 - - - -");
+         long startTime = Instant.now().toEpochMilli();
+         Result<?> result = null;
+@@ -146,7 +150,7 @@
+             return result;
+         } catch (Throwable throwable) {
+             result = handlerException(proceedingJoinPoint, throwable);
+-        }finally {
++        } finally {
+             //logger.info("- - - - - 环绕通知 end - - - -");
+         }
+         return result;
+@@ -157,9 +161,12 @@
+         if (e instanceof MyException) {
+             result.setCode(Result.FAIL);
+             result.setMsg(e.getMessage());
+-        }else if (e instanceof MyException2){
++        } else if (e instanceof MyException2) {
+             result.setCode(Result.FAIL);
+             result.setMsg(e.getMessage());
++        } else if (e instanceof Exception) {
++            result.setCode(Result.FAIL);
++            result.setMsg("参数"+e.getMessage());
+         }else {
+             //主线程未知异常，告知处理
+             logger.error(pjp.getSignature() + " Unknown exception occurs in main thread :", e);
+Index: src/test/java/com/ipanel/web/app/cv/LiveClassroomApplicationTests.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/com/ipanel/web/app/cv/LiveClassroomApplicationTests.java	(date 1546586930000)
++++ src/test/java/com/ipanel/web/app/cv/LiveClassroomApplicationTests.java	(date 1548497600296)
+@@ -1,27 +1,43 @@
+ package com.ipanel.web.app.cv;
+ 
+ import com.ipanel.web.app.cv.business.area.dao.IAreaRepository;
+-import com.ipanel.web.app.cv.entity.Area;
++import com.ipanel.web.app.cv.model.repository.primary.PrimaryMongoObject;
++import com.ipanel.web.app.cv.model.repository.primary.PrimaryRepository;
++import com.ipanel.web.app.cv.model.repository.secondary.SecondaryMongoObject;
++import com.ipanel.web.app.cv.model.repository.secondary.SecondaryRepository;
+ import org.junit.Test;
+ import org.junit.runner.RunWith;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.boot.test.context.SpringBootTest;
+ import org.springframework.test.context.junit4.SpringRunner;
+ 
+-import java.util.List;
+-
+ @RunWith(SpringRunner.class)
+ @SpringBootTest
+ public class LiveClassroomApplicationTests {
+ 
+-	@Autowired
+-	IAreaRepository areaRepository;
++    @Autowired
++    IAreaRepository areaRepository;
+ 
+-	@Test
+-	public void contextLoads() {
+-		areaRepository.test(1,2).forEach(System.out::println);
+-		System.out.println("______________________");
+-		areaRepository.test(2,1).forEach(System.out::println);
+-	}
++    @Autowired
++    PrimaryRepository primaryRepository;
++
++    @Autowired
++    SecondaryRepository secondaryRepository;
++
++
++    @Test
++    public void contextLoads() {
++
++        /*PrimaryMongoObject p = new PrimaryMongoObject();
++        p.setId(1);
++        p.setValue("测试！");
++        primaryRepository.save(p);*/
++
++        /*SecondaryMongoObject s = new SecondaryMongoObject();
++        s.setValue("测试！ahahahah");
++        secondaryRepository.save(s);*/
++
++        System.out.println(secondaryRepository.findAll());
++    }
+ 
+ }
+Index: src/main/java/com/ipanel/web/app/cv/task/MyTask.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/task/MyTask.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/task/MyTask.java	(date 1548315962985)
+@@ -19,10 +19,10 @@
+ 
+     @Async
+     public void sayHello(String name) throws MyException {
+-        logger.info(name+":Hello World!");
++        logger.info(name + ":Hello World!");
+         for (int i = 0; i < 10; i++) {
+-            logger.info(name+" say:"+i);
+-            throw  new MyException("异步线程抛出异常测试");
++            logger.info(name + " say:" + i);
++            throw new MyException("异步线程抛出异常测试");
+             //int l = 1/0;
+         }
+     }
+Index: src/main/java/com/ipanel/web/app/cv/entity/Area.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/entity/Area.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/entity/Area.java	(date 1548315965417)
+@@ -1,6 +1,5 @@
+ package com.ipanel.web.app.cv.entity;
+ 
+-import java.beans.Transient;
+ import java.io.Serializable;
+ import java.util.*;
+ 
+@@ -17,7 +16,6 @@
+ import javax.persistence.Table;
+ 
+ import com.fasterxml.jackson.annotation.JsonIgnore;
+-import lombok.Data;
+ import org.hibernate.annotations.DynamicInsert;
+ import org.hibernate.annotations.DynamicUpdate;
+ import org.hibernate.annotations.NotFound;
+@@ -27,99 +25,99 @@
+ @Table(name = "area")
+ @DynamicUpdate()
+ @DynamicInsert()
+-public class Area implements Serializable{
++public class Area implements Serializable {
+ 
+-	@Id
+-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+-	private Integer id;
++    @Id
++    @GeneratedValue(strategy = GenerationType.IDENTITY)
++    private Integer id;
+ 
+-	@Column(name = "area_name")
+-	private String areaName;
++    @Column(name = "area_name")
++    private String areaName;
+ 
+-	@Column(name = "area_level")
+-	private Integer areaLevel;
+-	
+-	@Column(name = "is_company")
+-	private Integer isCompany;
+-	
+-	@OneToOne(fetch = FetchType.LAZY)
+-	@JoinColumn(name = "parent_id")
+-	@NotFound(action = NotFoundAction.IGNORE)
+-	@JsonIgnore
+-	private Area parentArea;
+-	
+-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parentArea")
+-	@JsonIgnore
+-	private Set<Area> childrenAreas;
++    @Column(name = "area_level")
++    private Integer areaLevel;
++
++    @Column(name = "is_company")
++    private Integer isCompany;
++
++    @OneToOne(fetch = FetchType.LAZY)
++    @JoinColumn(name = "parent_id")
++    @NotFound(action = NotFoundAction.IGNORE)
++    @JsonIgnore
++    private Area parentArea;
++
++    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parentArea")
++    @JsonIgnore
++    private Set<Area> childrenAreas;
+ 
+-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "area")
+-	@JsonIgnore
+-	private List<Place> places;
++    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "area")
++    @JsonIgnore
++    private List<Place> places;
+ 
+-	public Integer getId() {
+-		return id;
+-	}
++    public Integer getId() {
++        return id;
++    }
+ 
+-	public void setId(Integer id) {
+-		this.id = id;
+-	}
++    public void setId(Integer id) {
++        this.id = id;
++    }
+ 
+-	public String getAreaName() {
+-		return areaName;
+-	}
++    public String getAreaName() {
++        return areaName;
++    }
+ 
+-	public void setAreaName(String areaName) {
+-		this.areaName = areaName;
+-	}
++    public void setAreaName(String areaName) {
++        this.areaName = areaName;
++    }
+ 
+-	public Integer getAreaLevel() {
+-		return areaLevel;
+-	}
++    public Integer getAreaLevel() {
++        return areaLevel;
++    }
+ 
+-	public void setAreaLevel(Integer areaLevel) {
+-		this.areaLevel = areaLevel;
+-	}
++    public void setAreaLevel(Integer areaLevel) {
++        this.areaLevel = areaLevel;
++    }
+ 
+-	public Integer getIsCompany() {
+-		return isCompany;
+-	}
++    public Integer getIsCompany() {
++        return isCompany;
++    }
+ 
+-	public void setIsCompany(Integer isCompany) {
+-		this.isCompany = isCompany;
+-	}
++    public void setIsCompany(Integer isCompany) {
++        this.isCompany = isCompany;
++    }
+ 
+-	public Area getParentArea() {
+-		return parentArea;
+-	}
++    public Area getParentArea() {
++        return parentArea;
++    }
+ 
+-	public void setParentArea(Area parentArea) {
+-		this.parentArea = parentArea;
+-	}
++    public void setParentArea(Area parentArea) {
++        this.parentArea = parentArea;
++    }
+ 
+-	public Set<Area> getChildrenAreas() {
+-		return childrenAreas;
+-	}
++    public Set<Area> getChildrenAreas() {
++        return childrenAreas;
++    }
+ 
+-	public void setChildrenAreas(Set<Area> childrenAreas) {
+-		this.childrenAreas = childrenAreas;
+-	}
++    public void setChildrenAreas(Set<Area> childrenAreas) {
++        this.childrenAreas = childrenAreas;
++    }
+ 
+-	public List<Place> getPlaces() {
+-		return places;
+-	}
++    public List<Place> getPlaces() {
++        return places;
++    }
+ 
+-	public void setPlaces(List<Place> places) {
+-		this.places = places;
+-	}
++    public void setPlaces(List<Place> places) {
++        this.places = places;
++    }
+ 
+-	@Override
+-	public String toString() {
+-		return "Area{" +
+-				"id=" + id +
+-				", areaName='" + areaName + '\'' +
+-				", areaLevel=" + areaLevel +
+-				", isCompany=" + isCompany +
+-				'}';
+-	}
++    @Override
++    public String toString() {
++        return "Area{" +
++                "id=" + id +
++                ", areaName='" + areaName + '\'' +
++                ", areaLevel=" + areaLevel +
++                ", isCompany=" + isCompany +
++                '}';
++    }
+ }
+ 
+Index: src/main/java/com/ipanel/web/app/cv/entity/Place.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/entity/Place.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/entity/Place.java	(date 1548315965255)
+@@ -25,7 +25,7 @@
+     public static final Integer TYPE_USR = 1;//用户
+     //userType
+     public static final Integer USER_STAFF = 0;//公司职员
+-    public static final	Integer USER_ADMIN = 1;//公司管理员
++    public static final Integer USER_ADMIN = 1;//公司管理员
+ 
+     @Id
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+@@ -37,13 +37,13 @@
+     @Column(name = "place_master")
+     private String placeMaster;
+ 
+-    @Column(name="phone_num")
++    @Column(name = "phone_num")
+     private String phoneNum;
+ 
+-    @Column(name="place_type")
++    @Column(name = "place_type")
+     private Integer placeType;
+ 
+-    @Column(name="email")
++    @Column(name = "email")
+     private String email;
+ 
+ 
+Index: src/main/java/com/ipanel/web/app/cv/global/Globals.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/global/Globals.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/global/Globals.java	(date 1548315963392)
+@@ -31,17 +31,19 @@
+         return true;
+     }
+ 
+-    public static Throwable getOriginException(Throwable e){
+-        while(e.getCause() != null){
++    public static Throwable getOriginException(Throwable e) {
++        while (e.getCause() != null) {
+             e = e.getCause();
+         }
+         return e;
+     }
++
+     /**
+      * 检查接口输入
++     *
+      * @param object req类
+      * @throws RequestParamErrorException e
+-     * @throws IllegalAccessException e
++     * @throws IllegalAccessException     e
+      */
+     public static void checkParams(Object object) throws RequestParamErrorException, IllegalAccessException {
+       /*  MyInterfaceRequestParams myInterfaceRequestParams = object.getClass().getAnnotation(MyInterfaceRequestParams.class);
+Index: src/main/java/com/ipanel/web/app/cv/global/RequestParamErrorException.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/global/RequestParamErrorException.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/global/RequestParamErrorException.java	(date 1548315964014)
+@@ -4,12 +4,12 @@
+  * @author zhaolei
+  * createTime 2018年9月17日 下午4:16:44
+  */
+-public class RequestParamErrorException extends Exception{
++public class RequestParamErrorException extends Exception {
+ 
+-	private static final long serialVersionUID = 6029238338869481420L;
++    private static final long serialVersionUID = 6029238338869481420L;
+ 
+     public RequestParamErrorException(String message) {
+-		super(message);
+-	}
+-	
++        super(message);
++    }
++
+ }
+Index: src/main/java/com/ipanel/web/app/cv/business/area/dao/IAreaRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/business/area/dao/IAreaRepository.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/business/area/dao/IAreaRepository.java	(date 1548315964785)
+@@ -18,17 +18,17 @@
+  * Description:
+  */
+ @Repository
+-public interface IAreaRepository extends CrudRepository<Area, Integer>,JpaSpecificationExecutor {
++public interface IAreaRepository extends CrudRepository<Area, Integer>, JpaSpecificationExecutor {
+ 
+     @Transactional
+     @Modifying
+-    @Query(value = "SELECT * FROM area WHERE parent_id= :parentId ",nativeQuery = true)
++    @Query(value = "SELECT * FROM area WHERE parent_id= :parentId ", nativeQuery = true)
+     List<Area> findByParentId(@Param("parentId") Integer parentId);
+ 
+ 
+     @Transactional
+     @Modifying
+-    @Query(value = "SELECT * FROM area WHERE id BETWEEN :A and :B",nativeQuery = true)
+-    List<Area> test(@Param("A") Integer A , @Param("B") Integer B);
+-    
++    @Query(value = "SELECT * FROM area WHERE id BETWEEN :A and :B", nativeQuery = true)
++    List<Area> test(@Param("A") Integer A, @Param("B") Integer B);
++
+ }
+Index: src/main/resources/application.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/application.yml	(date 1546586930000)
++++ src/main/resources/application.yml	(date 1548497668869)
+@@ -22,5 +22,11 @@
+         dialect: org.hibernate.dialect.MySQL5Dialect
+   profiles:
+     active: dev
+-info:
+-  applicationName: zhaolei
++mongodb:
++  primary:
++    uri: mongodb://119.29.175.180:27017/db_machine_disk
++    username: ipanel_ifs_web
++    password: IFS_web_ZDg0ZGI4ZDhhNzRjOGFmODBlZjc4N2My
++  secondary:
++    uri: mongodb://yangycy:123@119.29.175.180:27017/yangycy
++
+Index: src/main/java/com/ipanel/web/app/cv/global/SystemDefines.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/global/SystemDefines.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/global/SystemDefines.java	(date 1548315963262)
+@@ -5,8 +5,8 @@
+  * createTime 2018年9月17日 下午4:16:44
+  */
+ public class SystemDefines {
+-    public static final String AREA_PC_API  = "区域管理 -- PC";
+-    public static final String PLACE_PC_API  = "会场管理 -- PC";
++    public static final String AREA_PC_API = "区域管理 -- PC";
++    public static final String PLACE_PC_API = "会场管理 -- PC";
+ 
+     //日志类型
+     public static final String SYSLOG_ADD = "添加";
+Index: src/main/java/com/ipanel/web/app/cv/global/SpringUtil.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/global/SpringUtil.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/global/SpringUtil.java	(date 1548315964672)
+@@ -16,7 +16,7 @@
+ 
+     @Override
+     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+-        if(SpringUtil.applicationContext == null) {
++        if (SpringUtil.applicationContext == null) {
+             SpringUtil.applicationContext = applicationContext;
+         }
+     }
+@@ -27,17 +27,17 @@
+     }
+ 
+     //通过name获取 Bean.
+-    public static Object getBean(String name){
++    public static Object getBean(String name) {
+         return getApplicationContext().getBean(name);
+     }
+ 
+     //通过class获取Bean.
+-    public static <T> T getBean(Class<T> clazz){
++    public static <T> T getBean(Class<T> clazz) {
+         return getApplicationContext().getBean(clazz);
+     }
+ 
+     //通过name,以及Clazz返回指定的Bean
+-    public static <T> T getBean(String name,Class<T> clazz){
++    public static <T> T getBean(String name, Class<T> clazz) {
+         return getApplicationContext().getBean(name, clazz);
+     }
+ 
+Index: src/main/java/com/ipanel/web/app/cv/global/response/Result.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/global/response/Result.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/global/response/Result.java	(date 1548315964847)
+@@ -7,69 +7,69 @@
+  */
+ public class Result<T> implements Serializable {
+ 
+-	private static final long serialVersionUID = 1L;
+-	private static final int SUCCESS = 0;
++    private static final long serialVersionUID = 1L;
++    private static final int SUCCESS = 0;
+     public static final int FAIL = 1;
+     public static final int EXCEPTION = 500;
+-	private String msg = "success";
+-	private int code = SUCCESS;
+-	private T data;
++    private String msg = "success";
++    private int code = SUCCESS;
++    private T data;
+ 
+     public Result() {
+-		super();
+-	}
++        super();
++    }
+ 
+     public Result(T data, String msg, int code) {
+-		super();
+-		this.data = data;
+-		this.code = code;
+-		this.msg = msg;
+-	}
++        super();
++        this.data = data;
++        this.code = code;
++        this.msg = msg;
++    }
+ 
+     public Result(String msg, int code) {
+-		super();
+-		this.code = code;
+-		this.msg = msg;
+-	}
++        super();
++        this.code = code;
++        this.msg = msg;
++    }
+ 
+     public Result(T data) {
+-		super();
+-		this.data = data;
+-		if (data instanceof Boolean) {
+-			if (!(Boolean)data) {
+-				this.code = FAIL;
+-				this.msg = "failed";
+-			}
+-		}
+-	}
++        super();
++        this.data = data;
++        if (data instanceof Boolean) {
++            if (!(Boolean) data) {
++                this.code = FAIL;
++                this.msg = "failed";
++            }
++        }
++    }
+ 
+     public Result(Throwable e) {
+-		super();
+-		this.msg = e.toString();
+-		this.code = EXCEPTION;
+-	}
++        super();
++        this.msg = e.toString();
++        this.code = EXCEPTION;
++    }
+ 
+     public String getMsg() {
+-		return msg;
+-	}
++        return msg;
++    }
+ 
+     public void setMsg(String msg) {
+-		this.msg = msg;
+-	}
++        this.msg = msg;
++    }
+ 
+     public int getCode() {
+-		return code;
+-	}
++        return code;
++    }
+ 
+     public void setCode(int code) {
+-		this.code = code;
+-	}
++        this.code = code;
++    }
+ 
+     public T getData() {
+-		return data;
+-	}
++        return data;
++    }
+ 
+     public void setData(T data) {
+-		this.data = data;
+-	}
++        this.data = data;
++    }
+ }
+Index: src/main/java/com/ipanel/web/app/cv/global/response/PageVO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/global/response/PageVO.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/global/response/PageVO.java	(date 1548315961827)
+@@ -5,50 +5,50 @@
+  * createTime 2017年9月4日 下午5:39:28
+  */
+ public class PageVO<T> {
+-	private Long total;
+-	private Integer currentPage;
+-	private Integer totalPage;
+-	private T data;
++    private Long total;
++    private Integer currentPage;
++    private Integer totalPage;
++    private T data;
+ 
+-	public long getTotal() {
+-		return total;
+-	}
++    public long getTotal() {
++        return total;
++    }
+ 
+-	public void setTotal(long total) {
+-		this.total = total;
+-	}
++    public void setTotal(long total) {
++        this.total = total;
++    }
+ 
+-	public int getCurrentPage() {
+-		return currentPage;
+-	}
++    public int getCurrentPage() {
++        return currentPage;
++    }
+ 
+-	public void setCurrentPage(int currentPage) {
+-		this.currentPage = currentPage;
+-	}
++    public void setCurrentPage(int currentPage) {
++        this.currentPage = currentPage;
++    }
+ 
+-	public int getTotalPage() {
+-		return totalPage;
+-	}
++    public int getTotalPage() {
++        return totalPage;
++    }
+ 
+-	public void setTotalPage(int totalPage) {
+-		this.totalPage = totalPage;
+-	}
++    public void setTotalPage(int totalPage) {
++        this.totalPage = totalPage;
++    }
+ 
+-	public T getData() {
+-		return data;
+-	}
++    public T getData() {
++        return data;
++    }
+ 
+-	public void setData(T data) {
+-		this.data = data;
+-	}
++    public void setData(T data) {
++        this.data = data;
++    }
+ 
+-	public PageVO(long total, int currentPage, int totalPage, T data) {
+-		super();
+-		this.total = total;
+-		this.currentPage = currentPage;
+-		this.totalPage = totalPage;
+-		this.data = data;
+-	}
++    public PageVO(long total, int currentPage, int totalPage, T data) {
++        super();
++        this.total = total;
++        this.currentPage = currentPage;
++        this.totalPage = totalPage;
++        this.data = data;
++    }
+ 
+     @Override
+     public String toString() {
+Index: src/main/java/com/ipanel/web/app/cv/business/area/service/IAreaService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/business/area/service/IAreaService.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/business/area/service/IAreaService.java	(date 1548315965306)
+@@ -15,13 +15,16 @@
+ public interface IAreaService {
+     /**
+      * 添加区域
++     *
+      * @param req 添加字段
+      * @return Boolean boolean
+      * @throws Exception e
+      */
+     Area addArea(AddAreaReq req) throws Exception;
++
+     /**
+      * 根据区域查询区域树（当前区域以及所有子区域）
++     *
+      * @param areaId
+      * @return
+      * @throws Exception
+@@ -30,12 +33,15 @@
+ 
+     /**
+      * 根据区域查询区域树
++     *
+      * @return
+      * @throws Exception
+      */
+     AreaTreeEL queryAreaAllTreeGrid() throws Exception;
++
+     /**
+      * 更新区域
++     *
+      * @param areaId
+      * @param req
+      * @return
+@@ -44,6 +50,7 @@
+ 
+     /**
+      * 删除区域
++     *
+      * @param areaId
+      * @return
+      * @throws Exception
+Index: src/main/java/com/ipanel/web/app/cv/business/area/controller/AreaController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/business/area/controller/AreaController.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/business/area/controller/AreaController.java	(date 1548388839985)
+@@ -8,10 +8,8 @@
+ import com.ipanel.web.app.cv.business.area.controller.response.AreaTreeVO;
+ import com.ipanel.web.app.cv.business.area.service.IAreaService;
+ import com.ipanel.web.app.cv.entity.Area;
+-import com.ipanel.web.app.cv.global.MyException;
+-import com.ipanel.web.app.cv.global.MyException2;
+-import com.ipanel.web.app.cv.global.response.Result;
+ import com.ipanel.web.app.cv.global.SystemDefines;
++import com.ipanel.web.app.cv.global.response.Result;
+ import io.swagger.annotations.Api;
+ import io.swagger.annotations.ApiImplicitParam;
+ import io.swagger.annotations.ApiImplicitParams;
+@@ -21,6 +19,8 @@
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.web.bind.annotation.*;
+ 
++import javax.validation.Valid;
++
+ /**
+  * @author zhaolei
+  * Create: 2018/9/19 15:46
+@@ -45,7 +45,7 @@
+     @ApiOperation(value = "添加区域/单位")
+     @ApiImplicitParam(name = "req", value = "区域参数", dataType = "AddAreaReq", required = true, paramType = "body")
+     @RequestMapping(value = "", method = RequestMethod.POST)
+-    public Result<Area> addArea(@RequestBody AddAreaReq req) throws Exception{
++    public Result<Area> addArea(@Valid @RequestBody AddAreaReq req) throws Exception {
+         return new Result<>(areaService.addArea(req));
+     }
+ 
+@@ -54,14 +54,14 @@
+     @ApiOperation(value = "查询区域树（当前区域以及子区域）")
+     @ApiImplicitParam(name = "areaId", value = "区域/单位id", dataType = "int", required = true, paramType = "path")
+     @RequestMapping(value = "tree/{areaId}", method = RequestMethod.GET)
+-    public Result<AreaTreeVO> queryAreaTreeGrid(@PathVariable("areaId") Integer areaId) throws Exception{
+-        if (org.springframework.util.StringUtils.isEmpty(areaId)){
++    public Result<AreaTreeVO> queryAreaTreeGrid(@PathVariable("areaId") Integer areaId) throws Exception {
++        if (org.springframework.util.StringUtils.isEmpty(areaId)) {
+             areaId = 1;
+         }
+         //if (areaId == 1) throw new MyException2("测试异常");//抛出的异常*/
+ 
+         //未知的异常
+-       // int i = 1/0;
++        // int i = 1/0;
+ 
+         return new Result<>(areaService.queryAreaTreeGrid(areaId));
+ 
+@@ -86,19 +86,19 @@
+     }
+ 
+     @SysLog(operationType = SystemDefines.SYSLOG_DELETE, operationName = "删除区域")
+-    @ApiOperation(value = "删除区域"  )
++    @ApiOperation(value = "删除区域")
+     @ApiImplicitParam(name = "areaId", value = "区域/社区id", dataType = "int", required = true, paramType = "path")
+     @RequestMapping(value = "{areaId}", method = RequestMethod.DELETE)
+     public Result<Boolean> deleteArea(@PathVariable("areaId") Integer areaId) throws Exception {
+         return new Result<>(areaService.deleteArea(areaId));
+     }
+ 
+-    @ApiOperation(value = "测试"  )
++    @ApiOperation(value = "测试")
+     @ApiImplicitParam(name = "req", value = "测试参数", dataType = "AddReq", required = true, paramType = "body")
+     @RequestMapping(value = "{areaId}", method = RequestMethod.POST)
+-    public Result<Boolean> test(@PathVariable("areaId") Integer areaId,@RequestBody AddReq req) throws Exception {
++    public Result<Boolean> test(@PathVariable("areaId") Integer areaId, @RequestBody AddReq req) throws Exception {
+         logger.info(req.toString());
+-        logger.info("areaId={}",areaId);
++        logger.info("areaId={}", areaId);
+         return new Result<>(true);
+     }
+ }
+Index: src/main/resources/logback-spring.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/logback-spring.xml	(date 1546586930000)
++++ src/main/resources/logback-spring.xml	(date 1548315963748)
+@@ -1,7 +1,7 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <configuration>
+-    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+-    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
++    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
++    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+     <!-- 每次新建项目, 请注意下面四个配置文件的设置 -->
+     <springProperty scope="context" name="project-info" source="info.project"
+                     defaultValue="LiveClassroom"/>
+@@ -66,26 +66,26 @@
+         <append>true</append>
+         <!-- 日志文件的格式 -->
+         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%X{X-B3-TraceId:-},%X{X-B3-SpanId:-}] [%thread]  %logger
++            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%X{X-B3-TraceId:-},%X{X-B3-SpanId:-}] [%thread] %logger
+                 %msg%n
+             </pattern>
+             <charset>utf-8</charset>
+         </encoder>
+     </appender>
+ 
+-   <!--  &lt;!&ndash; show parameters for hibernate sql 专为 Hibernate 定制 &ndash;&gt;
+-   <logger name="org.hibernate.type.descriptor.sql.BasicBinder"  level="TRACE" />
+-   <logger name="org.hibernate.type.descriptor.sql.BasicExtractor"  level="DEBUG" />
+-   <logger name="org.hibernate.SQL" level="DEBUG" />
+-   <logger name="org.hibernate.engine.QueryParameters" level="DEBUG" />
+-   <logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG" />
+--->
++    <!--  &lt;!&ndash; show parameters for hibernate sql 专为 Hibernate 定制 &ndash;&gt;
++    <logger name="org.hibernate.type.descriptor.sql.BasicBinder"  level="TRACE" />
++    <logger name="org.hibernate.type.descriptor.sql.BasicExtractor"  level="DEBUG" />
++    <logger name="org.hibernate.SQL" level="DEBUG" />
++    <logger name="org.hibernate.engine.QueryParameters" level="DEBUG" />
++    <logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG" />
++ -->
+     <logger name="org.springframework" level="INFO"/>
+     <logger name="org.hibernate" level="INFO"/>
+ 
+     <!-- 生产环境下，将此级别配置为适合的级别，以免日志文件太多或影响程序性能 -->
+     <root level="INFO">
+-        <appender-ref ref="CONSOLE" />
++        <appender-ref ref="CONSOLE"/>
+         <appender-ref ref="logstash-json"/>
+         <appender-ref ref="FILE"/>
+     </root>
+Index: src/main/java/com/ipanel/web/app/cv/business/area/service/impl/AreaServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/business/area/service/impl/AreaServiceImpl.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/business/area/service/impl/AreaServiceImpl.java	(date 1548399969183)
+@@ -30,7 +30,7 @@
+  * Description:
+  */
+ @Service
+-public class AreaServiceImpl implements IAreaService{
++public class AreaServiceImpl implements IAreaService {
+     private static Logger logger = LoggerFactory.getLogger(AreaServiceImpl.class);
+ 
+     private IAreaRepository areaRepository;
+@@ -44,6 +44,7 @@
+ 
+     /**
+      * 加事务回滚 ALTER TABLE my_test ENGINE=INNODB;
++     *
+      * @param req 添加字段
+      * @return
+      * @throws Exception
+@@ -51,40 +52,42 @@
+     @Transactional
+     @Override
+     public Area addArea(AddAreaReq req) throws Exception {
+-        Globals.checkParams(req);
++        /*Globals.checkParams(req);
+         Optional<Area> optionalParentArea = areaRepository.findById(req.getParentId());
+-        if (req.getParentId().equals(0)){
+-            if (areaRepository.findByParentId(req.getParentId()).size() > 0){
++        if (req.getParentId().equals(0)) {
++            if (areaRepository.findByParentId(req.getParentId()).size() > 0) {
+                 throw new RequestParamErrorException("不可重复添加根区域");
+             }
+-        }else {
+-            if (!optionalParentArea.isPresent()){
++        } else {
++            if (!optionalParentArea.isPresent()) {
+                 throw new RequestParamErrorException("父区域id无效");
+             }
+-            if (optionalParentArea.get().getIsCompany() == 1 && req.getIsCompany() == 1){
++            if (optionalParentArea.get().getIsCompany() == 1 && req.getIsCompany() == 1) {
+                 throw new RequestParamErrorException("单位下面不可重复添加单位");
+             }
+-            if (optionalParentArea.get().getParentArea() != null && optionalParentArea.get().getParentArea().getIsCompany() == 1){
++            if (optionalParentArea.get().getParentArea() != null && optionalParentArea.get().getParentArea().getIsCompany() == 1) {
+                 throw new RequestParamErrorException("父区域隶属于单位，不可添加" + AreaTypeEnum.getName(req.getIsCompany()));
++
++
+             }
+         }
+-
+         Area area = new Area();
+         area.setIsCompany(req.getIsCompany());
+         area.setAreaName(req.getAreaName());
+-        if (optionalParentArea.isPresent()){
++        if (optionalParentArea.isPresent()) {
+             //非根区域情况
+-            area.setAreaLevel(optionalParentArea.get().getAreaLevel()+1); //父区域的级数+1
++            area.setAreaLevel(optionalParentArea.get().getAreaLevel() + 1); //父区域的级数+1
+             area.setParentArea(optionalParentArea.get());
+             return areaRepository.save(area);
+-        }else {
++        } else {
+             //根区域情况
+             area.setAreaLevel(1);
+             Area parentArea = new Area();
+             parentArea.setId(0);
+             area.setParentArea(parentArea);
+             return areaRepository.save(area);
+-        }
++        }*/
++        return null;
+     }
+ 
+     @Override
+@@ -93,7 +96,7 @@
+         myTask.sayHello("测试2");*/
+         Area area = areaRepository.findById(areaId).get();
+         List<Area> childrenArea = area.getChildrenAreas().stream().sorted(Comparator.comparing(Area::getId)).collect(Collectors.toList());
+-        return new AreaTreeVO(area,childrenArea);
++        return new AreaTreeVO(area, childrenArea);
+     }
+ 
+     @Override
+@@ -102,8 +105,9 @@
+         if (areaRepository.findById(1).isPresent())
+             area = areaRepository.findById(1).get();
+         assert area != null;
+-        return  new AreaTreeEL(area.getId(),area.getAreaName(),getChildArea(area.getChildrenAreas().stream().sorted(Comparator.comparing(Area::getId)).collect(Collectors.toList())));
++        return new AreaTreeEL(area.getId(), area.getAreaName(), getChildArea(area.getChildrenAreas().stream().sorted(Comparator.comparing(Area::getId)).collect(Collectors.toList())));
+     }
++
+     //递归逐层获取区域至底层区域
+     List<AreaTreeEL> getChildArea(List<Area> childAreas) {
+         List<AreaTreeEL> childAreaTreeELs = new ArrayList<>();
+@@ -111,7 +115,7 @@
+             AreaTreeEL areaTreeEL = new AreaTreeEL();
+             areaTreeEL.setId(childArea.getId());
+             areaTreeEL.setLabel(childArea.getAreaName());
+-            if (!childArea.getChildrenAreas().isEmpty()){
++            if (!childArea.getChildrenAreas().isEmpty()) {
+                 areaTreeEL.setChildren(getChildArea(childArea.getChildrenAreas().stream().sorted(Comparator.comparing(Area::getId)).collect(Collectors.toList())));
+             }
+             childAreaTreeELs.add(areaTreeEL);
+@@ -120,7 +124,7 @@
+     }
+ 
+     @Override
+-    public Boolean updateArea(Integer areaId, UpdateAreaReq req) throws Exception{
++    public Boolean updateArea(Integer areaId, UpdateAreaReq req) throws Exception {
+         Area area = areaRepository.findById(areaId).get();
+         area.setAreaName(req.getAreaName());
+         areaRepository.save(area);
+@@ -130,16 +134,16 @@
+     @Override
+     public Boolean deleteArea(Integer areaId) throws Exception {
+         Optional<Area> optionalArea = areaRepository.findById(areaId);
+-        if (!optionalArea.isPresent()){
++        if (!optionalArea.isPresent()) {
+             throw new Exception("不存在该区域的id号");
+         }
+-       if (optionalArea.get().getChildrenAreas().size() > 0){
+-           throw new Exception("该区域下存在子区域，不可删除");
+-       }
+-       if (optionalArea.get().getPlaces().size() > 0){
++        if (optionalArea.get().getChildrenAreas().size() > 0) {
++            throw new Exception("该区域下存在子区域，不可删除");
++        }
++        if (optionalArea.get().getPlaces().size() > 0) {
+             throw new Exception("该区域下存在会场，不可删除");
+-       }
+-       areaRepository.delete(optionalArea.get());
++        }
++        areaRepository.delete(optionalArea.get());
+         return true;
+     }
+ }
+Index: src/main/java/com/ipanel/web/app/cv/interceptor/MyInterceptor.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/interceptor/MyInterceptor.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/interceptor/MyInterceptor.java	(date 1548315963056)
+@@ -18,21 +18,20 @@
+     private static Logger logger = LoggerFactory.getLogger(MyInterceptor.class);
+ 
+ 
+-
+     @Override
+     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
+-        logger.info("token header == "+httpServletRequest.getHeader("token"));
++        logger.info("token header == " + httpServletRequest.getHeader("token"));
+         return true;
+     }
+ 
+     @Override
+     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
+-      // System.out.println("postHandle被调用");
++        // System.out.println("postHandle被调用");
+     }
+ 
+     @Override
+     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
+-       // System.out.println("afterCompletion被调用");
++        // System.out.println("afterCompletion被调用");
+     }
+ 
+ }
+\ No newline at end of file
+Index: src/main/java/com/ipanel/web/app/cv/business/area/controller/response/AreaTreeVO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/business/area/controller/response/AreaTreeVO.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/business/area/controller/response/AreaTreeVO.java	(date 1548315965359)
+@@ -14,7 +14,7 @@
+  * Description:
+  */
+ @Data
+-public class AreaTreeVO implements Serializable{
++public class AreaTreeVO implements Serializable {
+ 
+     @ApiModelProperty(value = "区域id")
+     private Integer id;
+Index: src/main/java/com/ipanel/web/app/cv/business/area/controller/request/AddAreaReq.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/business/area/controller/request/AddAreaReq.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/business/area/controller/request/AddAreaReq.java	(date 1548400671375)
+@@ -3,6 +3,9 @@
+ import io.swagger.annotations.ApiModelProperty;
+ import lombok.Data;
+ 
++import javax.validation.constraints.*;
++import java.util.List;
++
+ /**
+  * @author zhaolei
+  * Create: 2018/9/19 16:09
+@@ -11,10 +14,24 @@
+  */
+ @Data
+ public class AddAreaReq {
++
+     @ApiModelProperty(value = "父区域id", required = true)
++    @Min(value = 1, message = "parentId至少大于等于1")
++    @NotNull(message = "parentId不能为空")
+     private Integer parentId;
++
+     @ApiModelProperty(value = "区域名称", required = true)
++    @NotBlank(message = "areaName不能为空")
+     private String areaName;
++
+     @ApiModelProperty(value = "是否为社区", required = true)
++    @Min(value = 0, message = "isCompany至少大于等于0")
++    @Max(value = 1, message = "isCompany至多小于等于1")
++    @NotNull(message = "isCompany不能为空")
+     private Integer isCompany;
++
++    @ApiModelProperty(value = "是否为社区", required = true)
++    @Size(min = 1, max = 2, message = "test长度至少为1，之多为2")
++    @NotNull(message = "test不能为空")
++    private List<Integer> test;
+ }
+Index: src/main/java/com/ipanel/web/app/cv/annotation/SysLog.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/annotation/SysLog.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/annotation/SysLog.java	(date 1548315964310)
+@@ -8,13 +8,17 @@
+  * Modified By:
+  * Description:
+  */
+-@Target({ ElementType.PARAMETER, ElementType.METHOD })
++@Target({ElementType.PARAMETER, ElementType.METHOD})
+ @Retention(RetentionPolicy.RUNTIME)
+ @Documented
+ public @interface SysLog {
+-	/** 要执行的操作类型比如：add操作 **/
+-	public String operationType() default "";
++    /**
++     * 要执行的操作类型比如：add操作
++     **/
++    public String operationType() default "";
+ 
+-	/** 要执行的具体操作内容比如：添加用户 **/
+-	public String operationName() default "";
++    /**
++     * 要执行的具体操作内容比如：添加用户
++     **/
++    public String operationName() default "";
+ }
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- pom.xml	(date 1546586930000)
++++ pom.xml	(date 1548478185890)
+@@ -1,99 +1,104 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+-	<modelVersion>4.0.0</modelVersion>
++         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
++    <modelVersion>4.0.0</modelVersion>
+ 
+-	<groupId>com.ipanel.web.app.cv</groupId>
+-	<artifactId>liveclassroom</artifactId>
+-	<version>0.0.1-SNAPSHOT</version>
+-	<packaging>jar</packaging>
++    <groupId>com.ipanel.web.app.cv</groupId>
++    <artifactId>liveclassroom</artifactId>
++    <version>0.0.1-SNAPSHOT</version>
++    <packaging>jar</packaging>
+ 
+-	<name>LiveClassroom</name>
+-	<description>LiveClassroom project for Spring Boot</description>
++    <name>LiveClassroom</name>
++    <description>LiveClassroom project for Spring Boot</description>
+ 
+-	<parent>
+-		<groupId>org.springframework.boot</groupId>
+-		<artifactId>spring-boot-starter-parent</artifactId>
+-		<version>2.0.5.RELEASE</version>
+-		<relativePath/> <!-- lookup parent from repository -->
+-	</parent>
++    <parent>
++        <groupId>org.springframework.boot</groupId>
++        <artifactId>spring-boot-starter-parent</artifactId>
++        <version>2.0.8.RELEASE</version>
++        <relativePath/> <!-- lookup parent from repository -->
++    </parent>
+ 
+-	<properties>
+-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+-		<java.version>1.8</java.version>
+-	</properties>
++    <properties>
++        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
++        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
++        <java.version>1.8</java.version>
++    </properties>
+ 
+-	<dependencies>
+-		<!--aop依赖-->
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-aop</artifactId>
+-		</dependency>
+-		<!--jpa、mysql和连接池依赖-->
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-data-jpa</artifactId>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-jdbc</artifactId>
+-		</dependency>
+-		<dependency>
+-			<groupId>mysql</groupId>
+-			<artifactId>mysql-connector-java</artifactId>
+-			<scope>runtime</scope>
+-		</dependency>
++    <dependencies>
++
++        <dependency>
++            <groupId>org.springframework.boot</groupId>
++            <artifactId>spring-boot-starter-data-mongodb</artifactId>
++        </dependency>
++        <!--aop依赖-->
++        <dependency>
++            <groupId>org.springframework.boot</groupId>
++            <artifactId>spring-boot-starter-aop</artifactId>
++        </dependency>
++        <!--jpa、mysql和连接池依赖-->
++        <dependency>
++            <groupId>org.springframework.boot</groupId>
++            <artifactId>spring-boot-starter-data-jpa</artifactId>
++        </dependency>
++        <dependency>
++            <groupId>org.springframework.boot</groupId>
++            <artifactId>spring-boot-starter-jdbc</artifactId>
++        </dependency>
++        <dependency>
++            <groupId>mysql</groupId>
++            <artifactId>mysql-connector-java</artifactId>
++            <scope>runtime</scope>
++        </dependency>
+ 
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-web</artifactId>
+-		</dependency>
++        <dependency>
++            <groupId>org.springframework.boot</groupId>
++            <artifactId>spring-boot-starter-web</artifactId>
++        </dependency>
+ 
+-
+-		<dependency>
+-			<groupId>org.projectlombok</groupId>
+-			<artifactId>lombok</artifactId>
+-			<optional>true</optional>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-test</artifactId>
+-			<scope>test</scope>
+-		</dependency>
+-		<!--swagger2依赖-->
+-		<dependency>
+-			<groupId>io.springfox</groupId>
+-			<artifactId>springfox-swagger2</artifactId>
+-			<version>2.8.0</version>
+-		</dependency>
+-		<dependency>
+-			<groupId>io.springfox</groupId>
+-			<artifactId>springfox-swagger-ui</artifactId>
+-			<version>2.8.0</version>
+-		</dependency>
+-		<!--gson依赖-->
+-		<dependency>
+-			<groupId>com.google.code.gson</groupId>
+-			<artifactId>gson</artifactId>
+-		</dependency>
+-		<!--logstash-->
+-		<!-- https://mvnrepository.com/artifact/net.logstash.logback/logstash-logback-encoder -->
+-		<dependency>
+-			<groupId>net.logstash.logback</groupId>
+-			<artifactId>logstash-logback-encoder</artifactId>
+-			<version>4.11</version>
+-		</dependency>
+-	</dependencies>
++        <!--代码插件-->
++        <dependency>
++            <groupId>org.projectlombok</groupId>
++            <artifactId>lombok</artifactId>
++            <optional>true</optional>
++        </dependency>
++        <dependency>
++            <groupId>org.springframework.boot</groupId>
++            <artifactId>spring-boot-starter-test</artifactId>
++            <scope>test</scope>
++        </dependency>
++        <!--swagger2依赖-->
++        <dependency>
++            <groupId>io.springfox</groupId>
++            <artifactId>springfox-swagger2</artifactId>
++            <version>2.8.0</version>
++        </dependency>
++        <dependency>
++            <groupId>io.springfox</groupId>
++            <artifactId>springfox-swagger-ui</artifactId>
++            <version>2.8.0</version>
++        </dependency>
++        <!--gson依赖-->
++        <dependency>
++            <groupId>com.google.code.gson</groupId>
++            <artifactId>gson</artifactId>
++        </dependency>
++        <!--logstash-->
++        <!-- https://mvnrepository.com/artifact/net.logstash.logback/logstash-logback-encoder -->
++        <dependency>
++            <groupId>net.logstash.logback</groupId>
++            <artifactId>logstash-logback-encoder</artifactId>
++            <version>4.11</version>
++        </dependency>
++    </dependencies>
+ 
+-	<build>
+-		<plugins>
+-			<plugin>
+-				<groupId>org.springframework.boot</groupId>
+-				<artifactId>spring-boot-maven-plugin</artifactId>
+-			</plugin>
+-		</plugins>
+-	</build>
++    <build>
++        <plugins>
++            <plugin>
++                <groupId>org.springframework.boot</groupId>
++                <artifactId>spring-boot-maven-plugin</artifactId>
++            </plugin>
++        </plugins>
++    </build>
+ 
+ 
+ </project>
+Index: src/main/java/com/ipanel/web/app/cv/business/place/service/IPlaceService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/ipanel/web/app/cv/business/place/service/IPlaceService.java	(date 1546586930000)
++++ src/main/java/com/ipanel/web/app/cv/business/place/service/IPlaceService.java	(date 1548315962137)
+@@ -14,13 +14,15 @@
+ public interface IPlaceService {
+     /**
+      * 添加会场
++     *
+      * @param req
+      * @return
+      */
+-    Boolean addPlace(AddPlaceReq req) throws  Exception;
++    Boolean addPlace(AddPlaceReq req) throws Exception;
+ 
+     /**
+      * 查询区域会场
++     *
+      * @param areaId
+      * @return
+      */

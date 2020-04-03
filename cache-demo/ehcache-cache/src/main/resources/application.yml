@@ -1,0 +1,28 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /ehcache
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/cache-demo?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false
+    username: root
+    password: root
+    hikari:
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      maximum-pool-size: 100
+      connection-test-query: SELECT 1
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+          dialect: org.hibernate.dialect.MySQL5Dialect
+  cache:
+    #指定缓存配置文件
+    ehcache:
+      config: classpath:cache/ehcache2.xml
+    #jcache:
+      #config: classpath:cache/ehcache3.xml
+
